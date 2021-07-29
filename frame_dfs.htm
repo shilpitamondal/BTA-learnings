@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+    <head>
+       <link rel="stylesheet" href="style.css">
+    </head>
+    <body class="framebody">
+        <h1>Depth-first search</h1>
+        <pre>
+Depth first search (DFS) algorithm starts with the initial node of the graph G, 
+and then goes to deeper and deeper until we find the goal node or the node which 
+has no children. The algorithm, then backtracks from the dead end towards the most 
+recent node that is yet to be completely unexplored.
+
+<b>Algorithm:</b>
+A standard DFS implementation puts each vertex of the graph into one of two categories:
+ 1.Visited  2.Not Visited
+
+The purpose of the algorithm is to mark each vertex as visited while avoiding cycles.
+
+The DFS algorithm works as follows:
+
+1.Start by putting any one of the graph's vertices on top of a stack.
+2.Take the top item of the stack and add it to the visited list.
+3.Create a list of that vertex's adjacent nodes. Add the ones which aren't in the visited 
+list to the top of the stack.
+4.Keep repeating steps 2 and 3 until the stack is empty.
+
+<b>Example:</b>
+Consider the graph G along with its adjacency list, given in the figure below. Calculate 
+the order to print all the nodes of the graph starting from node H, by using depth first 
+search (DFS) algorithm.
+            
+<img src="images/depth-first-search-algorithm-example.png">
+
+Push H onto the stack
+  STACK : H   
+
+POP the top element of the stack i.e. H, print it and push all the neighbours of H onto the 
+stack that are is ready state.
+  Print H   
+  STACK : A 
+
+Pop the top element of the stack i.e. A, print it and push all the neighbours of A onto the 
+stack that are in ready state.
+  Print A  
+  Stack : B, D  
+
+Pop the top element of the stack i.e. D, print it and push all the neighbours of D onto the 
+stack that are in ready state.
+  Print D   
+  Stack : B, F   
+
+Pop the top element of the stack i.e. F, print it and push all the neighbours of F onto the 
+stack that are in ready state.
+  Print F  
+  Stack : B  
+
+Pop the top of the stack i.e. B and push all the neighbours
+  Print B   
+  Stack : C   
+
+Pop the top of the stack i.e. C and push all the neighbours.
+  Print C   
+  Stack : E, G   
+
+Pop the top of the stack i.e. G and push all its neighbours.
+  Print G  
+  Stack : E  
+
+Pop the top of the stack i.e. E and push all its neighbours.
+  Print E  
+  Stack :  
+
+Hence, the stack now becomes empty and all the nodes of the graph have been traversed.
+
+The printing sequence of the graph will be :
+
+  H → A → D → F → B → C → G → E  
+
+<b>Corresponding Code:</b>
+// DFS algorithm in C
+
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+struct node {
+  int vertex;
+  struct node* next;
+};
+
+struct node* createNode(int v);
+
+struct Graph {
+  int numVertices;
+  int* visited;
+
+  // We need int** to store a two dimensional array.
+  // Similary, we need struct node** to store an array of Linked lists
+  struct node** adjLists;
+};
+
+// DFS algo
+void DFS(struct Graph* graph, int vertex) {
+  struct node* adjList = graph->adjLists[vertex];
+  struct node* temp = adjList;
+
+  graph->visited[vertex] = 1;
+  printf("Visited %d \n", vertex);
+
+  while (temp != NULL) {
+    int connectedVertex = temp->vertex;
+
+    if (graph->visited[connectedVertex] == 0) {
+      DFS(graph, connectedVertex);
+    }
+    temp = temp->next;
+  }
+}
+
+// Create a node
+struct node* createNode(int v) {
+  struct node* newNode = malloc(sizeof(struct node));
+  newNode->vertex = v;
+  newNode->next = NULL;
+  return newNode;
+}
+
+// Create graph
+struct Graph* createGraph(int vertices) {
+  struct Graph* graph = malloc(sizeof(struct Graph));
+  graph->numVertices = vertices;
+
+  graph->adjLists = malloc(vertices * sizeof(struct node*));
+
+  graph->visited = malloc(vertices * sizeof(int));
+
+  int i;
+  for (i = 0; i < vertices; i++) {
+    graph->adjLists[i] = NULL;
+    graph->visited[i] = 0;
+  }
+  return graph;
+}
+
+// Add edge
+void addEdge(struct Graph* graph, int src, int dest) {
+  // Add edge from src to dest
+  struct node* newNode = createNode(dest);
+  newNode->next = graph->adjLists[src];
+  graph->adjLists[src] = newNode;
+
+  // Add edge from dest to src
+  newNode = createNode(src);
+  newNode->next = graph->adjLists[dest];
+  graph->adjLists[dest] = newNode;
+}
+
+// Print the graph
+void printGraph(struct Graph* graph) {
+  int v;
+  for (v = 0; v < graph->numVertices; v++) {
+    struct node* temp = graph->adjLists[v];
+    printf("\n Adjacency list of vertex %d\n ", v);
+    while (temp) {
+      printf("%d -> ", temp->vertex);
+      temp = temp->next;
+    }
+    printf("\n");
+  }
+}
+
+int main() {
+  struct Graph* graph = createGraph(4);
+  addEdge(graph, 0, 1);
+  addEdge(graph, 0, 2);
+  addEdge(graph, 1, 2);
+  addEdge(graph, 2, 3);
+
+  printGraph(graph);
+
+  DFS(graph, 2);
+
+  return 0;
+}
+
+<b>Output:</b>
+Adjacency list of vertex 0
+2 -> 1 -> 
+
+Adjacency list of vertex 1
+2 -> 0 -> 
+
+Adjacency list of vertex 2
+3 -> 1 -> 0 -> 
+
+Adjacency list of vertex 3
+2 -> 
+
+Visited 2 
+
+Visited 3 
+
+Visited 1 
+
+Visited 0 
+
+
+<h3>Complexity:</h3>
+The time complexity of the DFS algorithm is represented in the form of O(V + E), 
+where V is the number of nodes and E is the number of edges.
+
+The space complexity of the algorithm is O(V).
+
+
+        </pre>
+    </body>
+
+</html>

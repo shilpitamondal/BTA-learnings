@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body class="framebody"> 
+        <h1>Binary Search</h1>
+        <pre>
+<b>Working Principle:</b> Binary Search works with a sorted array by repeatedly dividing
+ the search interval in half. Begin with an interval covering the whole array. If the 
+ value of the search key is less than the item in the middle of the interval, narrow the 
+ interval to the lower half. Otherwise narrow it to the upper half. Repeatedly check until 
+ the value is found or the interval is empty.
+
+<b>Algorithm:</b>
+Let A[] be a array of n sorted elements (A[0],A[1]....,A[n-1]) and x is the element being searched.
+1. Set L=0 and R=n-1
+2.If L>R the search is terminated unsuccessfuly
+3.Set mid(the middle element) = L+(R-L)/2
+4.If mid = x , the search is done return index mid
+5.If mid < x , set L=mid+1 and goto step 2
+6.If mid > x , ser R=mid-1 and goto step 2
+
+<b>Dry Run :</b>
+        </pre>
+        <img src="images/binary-search-example.png" >
+        <pre>
+<h3>Corresponding code:</h3>
+            // C program to implement recursive Binary Search 
+            #include &lt;stdio.h&gt; 
+                        
+            // A recursive binary search function. It returns 
+            // location of x in given array arr[l..r] is present, 
+            // otherwise -1 
+            int binarySearch(int arr[], int l, int r, int x) 
+            { 
+                if (r >= l) { 
+                int mid = l + (r - l) / 2; 
+                        
+                // If the element is present at the middle 
+                // itself 
+                if (arr[mid] == x) 
+                    return mid; 
+                        
+                // If element is smaller than mid, then 
+                // it can only be present in left subarray 
+                if (arr[mid] > x) 
+                    return binarySearch(arr, l, mid - 1, x); 
+                        
+                // Else the element can only be present 
+                // in right subarray 
+                return binarySearch(arr, mid + 1, r, x); 
+                } 
+                        
+                //if the element is not present in teh array 
+                return -1; 
+            } 
+                        
+            int main(void) 
+            { 
+                int arr[] = { 2, 3, 4, 10, 40 }; 
+
+                //n will give the size of the array
+                int n = sizeof(arr) / sizeof(arr[0]); 
+                int x = 10; 
+
+                //calling the binary search function
+                int result = binarySearch(arr, 0, n - 1, x); 
+
+
+                (result == -1) ? printf("Element is not present in array") 
+                : printf("Element is present at index %d \n",result); 
+                return 0; 
+            } 
+
+<h3>Output:</h3>
+
+            Element is present at index 3
+
+<h3>Complexity:</h3>
+Worst-case time complexity - O(log n)
+Best-case time complexity -  O(1)
+Average time complexity - O(log n)
+Maximum number of iteration is required when the number of element of reduced array , 
+after repeatative call of recursive function BinarySearch will be 1.
+1.At iteration 1: array length = n
+2.At iteration 2: array length = n/2
+3.At iteration 3: array length = (n/2)/2 = n/2<sup>2</sup>
+    .
+    .
+    .
+4.At iteration k: array length = n/2<sup>k</sup> , Where k is the no. of iterations after which binary 
+search terminates.
+5. After k no. iteration length of array is 1
+   Therefore:  
+                n/2<sup>k</sup> = 1
+              => n = 2<sup>k</sup>
+              => log<sub>2</sub> (n) = log<sub>2</sub> ( 2<sup>k</sup>) 
+              => log<sub>2</sub> (n) = k log<sub>2</sub> (2)
+              => log<sub>2</sub> (n) = k
+
+
+Worst-case space complexity - O(1)           
+       </pre>
+    </body>
+
+</html>

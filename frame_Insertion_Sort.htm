@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+         <link rel="stylesheet" href="style.css">
+    </head>
+    <body class="framebody">
+        <h1>Insertion Sort</h1>
+        <pre>
+<b>Working Principle:</b> Insertion sort is a simple sorting algorithm that works 
+similar to the way you sort playing cards in your hands. The array is virtually 
+split into a sorted and an unsorted part. Values from the unsorted part are picked 
+and placed at the correct position in the sorted part.
+
+<b>Algorithm :</b>
+To sort an array of size n in ascending order: 
+1. Set a marker for the sorted section after the first element.
+2. Repeat the following until unsorted section is empty
+    2.1. Select the first unsorted element
+    2.2. Swap other elements to the right to create the correct position and 
+         shift the unsorted element
+    2.3. Advance the marker to one position right
+
+<b>Dry Run:</b>
+        </pre>
+
+        <img src="images/insertion-sort.png">
+        <pre>
+<h3>Corresponding code:</h3>
+            // C program for insertion sort
+            #include &lt;math.h&gt;
+            #include &lt;stdio.h&gt;
+             
+            /* Function to sort an array using insertion sort*/
+            void insertionSort(int arr[], int n)
+            {
+                int i, key, j;
+                for (i = 1; i &lt; n; i++) {
+                    key = arr[i];
+                    j = i - 1;
+             
+                    /* Move elements of arr[0..i-1], that are
+                      greater than key, to one position ahead
+                      of their current position */
+                    while (j >= 0 &amp;&amp; arr[j] > key) {
+                        arr[j + 1] = arr[j];
+                        j = j - 1;
+                    }
+                    arr[j + 1] = key;
+                }
+            }
+             
+            // A utility function to print an array of size n
+            void printArray(int arr[], int n)
+            {
+                int i;
+                for (i = 0; i &lt; n; i++)
+                    printf("%d ", arr[i]);
+                printf("\n");
+            }
+             
+            /* Driver program to test insertion sort */
+            int main()
+            {
+                int arr[] = { 12, 11, 13, 5, 6 };
+                int n = sizeof(arr) / sizeof(arr[0]);
+             
+                insertionSort(arr, n);
+                printArray(arr, n);
+             
+                return 0;
+            }
+<h3>Output:</h3>
+
+            5 6 11 12 13
+
+<h3>Complexity:</h3>
+Worst-case time complexity -  О(n<sup>2</sup>) 
+If array is sorted in reverse order. In these cases every iteration of the inner loop will 
+scan and shift the entire sorted subsection of the array before inserting the next element.
+
+Best-case time complexity -  O(n)
+If  an array that is already sorted. During each iteration, the first remaining element of 
+the input is only compared with the right-most element of the sorted subsection of the array.
+
+Average-case time complexity - О(n<sup>2</sup>) 
+
+Space complexity - O(1) 
+       </pre>
+    </body>
+
+</html>
